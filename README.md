@@ -1,5 +1,5 @@
 ## Intro:
-This repository contains a model trained on - and to be used with - TALLSorts. Briefly: It was trained on the publicly available *_counts file from Polonen 2025 after normalization in DESeq2. It expects normalized counts as input with rows as columns as ensembl gene names and rows as patient IDs:
+This repository contains a model trained - and to be used with - TALLSorts for subtyping of TALL based on RNA-seq. Briefly: It was trained on the publicly available *_counts file from Polonen 2025 after normalization in DESeq2. It expects normalized counts as input with rows as columns as ensembl gene names and rows as patient IDs:
 
 <img width="331" height="163" alt="image" src="https://github.com/user-attachments/assets/99109d8c-6fca-472e-911d-58c527036c3f" />
 
