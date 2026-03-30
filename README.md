@@ -13,6 +13,8 @@ TALLSorts -m test -s normalized_counts.csv --d outdir --mp Polonen_cleaned_norma
 
 
 ## T-ALL Subtype Classifier Training Pipeline:
+Here I outline how this model was trained.
+
 ### Input data
 - Polonen RNA-seq counts-derived matrix used as starting point for model preparation
 - Clinical metadata (clin_df) containing Patient_ID and Subtype
