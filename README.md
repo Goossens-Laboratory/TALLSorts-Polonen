@@ -1,14 +1,61 @@
-###EXAMPLE RUN - conda activate tallsortsenv - TALLSorts -m train -s Prepared_training/Polonen_cleaned_normalized_counts.csv --ss Prepared_training/sample_sheet_labeled_only.csv --hierarchy hierarchy.csv --tp training_params.csv --tc 6 -d Polonen_cleaned_normalized_counts - TALLSorts -m test -s counts.csv --d outDir --mp Polonen_cleaned_normalized_counts_TALLSortsModel.pkl.gz
+## Intro:
+This repository contains a model trained on - and to be used with - TALLSorts. Briefly: It was trained on the publicly available *_counts file from Polonen 2025 after normalization in DESeq2. It expects normalized counts as input with rows as columns as ensembl gene names and rows as patient IDs:
+
+<img width="331" height="163" alt="image" src="https://github.com/user-attachments/assets/99109d8c-6fca-472e-911d-58c527036c3f" />
 
 
-###T-ALL Subtype Classifier Training Pipeline:Input data - Polonen RNA-seq counts-derived matrix used as starting point for model preparation - Clinical metadata (clin_df) containing Patient_ID and Subtype - One-hot encoded sample sheet generated from clin_df for TALLSorts training
-Gene ID processing - Strip Ensembl version suffixes - ENSG00000000003.14 -> ENSG00000000003 - Collapse duplicate Ensembl IDs by mean expression
-Annotation-based filtering - Annotate Ensembl IDs from GTF - Retain protein-coding genes only - Remove: - mitochondrial genes - Y chromosome genes - XIST - Result: approximately 16k genes retained
-Sample filtering - Remove samples without subtype labels - Keep only labeled samples present in both: - counts matrix - sample sheet - Ensures exact 1:1 correspondence between matrix rows and labels
-Low-expression filtering - Keep genes with count > 5 in >= 4 samples - Chosen to preserve signal from rare subtypes with very small sample counts
-Sample sheet construction - Convert clin_df subtype labels to one-hot encoded columns - Remove samples with missing subtype - Save filtered sample sheet for TALLSorts training
-Matrix formatting - Transpose cleaned counts matrix to samples x genes - Rows = sample IDs - Columns = Ensembl gene IDs - Save as: - Polonen_cleaned_normalized_counts.csv
-Model training - Train TALLSorts on: - cleaned, transposed normalized-count matrix - filtered one-hot sample sheet - hierarchy.csv - training_params.csv - TALLSorts then performs its own internal normalization / scaling during model fitting
-Key design choices - Use Polonen DESeq2-like normalized counts so training data better matches the Ghent cohort input format - Do not use TPM, FPKM, or VST for model training because they are less directly comparable to the Ghent normalized-count input - Apply TALLSorts-inspired biological filtering before training - Preserve rare subtype signal by using a permissive low-expression rule - Let the logistic regression model perform feature sparsification during training
-Outputs - trained TALLSorts model - cleaned training matrix - filtered sample sheet - annotation table used for filtering
-Notes - Log-transformed and scaled matrices were generated separately for QC and exploratory analyses, but were not used as direct input to TALLSorts training - Pipeline was optimized for cross-cohort compatibility with Ghent rather than exact reproduction of the original published TALLSorts preprocessing - Rare subtypes were retained, including classes with sample counts near 5
+## EXAMPLE RUN
+[picks up after TALLSorts installation]
+````
+conda activate tallsortsenv
+TALLSorts -m test -s normalized_counts.csv --d outdir --mp Polonen_cleaned_normalized_counts.pkl.gz
+````
+
+
+## T-ALL Subtype Classifier Training Pipeline:
+### Input data
+- Polonen RNA-seq counts-derived matrix used as starting point for model preparation
+- Clinical metadata (clin_df) containing Patient_ID and Subtype
+- One-hot encoded sample sheet generated from clin_df for TALLSorts training
+
+### Gene ID processing
+- Strip Ensembl version suffixes
+- ENSG00000000003.14 -> ENSG00000000003
+- Collapse duplicate Ensembl IDs by mean expression
+
+### Annotation-based filtering
+- Annotate Ensembl IDs from GTF
+- Retain protein-coding genes only
+- Remove:
+  - mitochondrial genes
+  - Y chromosome genes
+  - XIST - Result: approximately 16k genes retained
+
+### Sample filtering
+- Remove samples without subtype labels
+- Keep only labeled samples present in both:
+  - counts matrix
+  - sample sheet
+
+### Low-expression filtering
+- Keep genes with count > 5 in >= 4 samples
+- Chosen to preserve signal from rare subtypes with very small sample counts
+
+### Sample sheet construction
+- Convert clin_df subtype labels to one-hot encoded columns
+- Remove samples with missing subtype
+- Save filtered sample sheet for TALLSorts training
+
+### Matrix formatting
+- Transpose cleaned counts matrix to samples x genes
+- Rows = sample IDs
+- Columns = Ensembl gene IDs
+- Output: Polonen_cleaned_normalized_counts.csv
+
+### Model training
+- Train TALLSorts on:
+  - Cleaned, transposed normalized-count matrix
+  - filtered one-hot sample sheet
+  - hierarchy.csv
+  - training_params.csv
+  - TALLSorts then performs its own internal normalization / scaling during model fitting
