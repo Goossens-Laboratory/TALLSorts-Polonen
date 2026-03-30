@@ -1,11 +1,15 @@
 ## Intro:
-This repository contains a model trained - and to be used with - TALLSorts for subtyping of TALL based on RNA-seq. Briefly: It was trained on the publicly available *_counts file from Polonen 2025 after normalization in DESeq2. It expects normalized counts as input with rows as columns as ensembl gene names and rows as patient IDs:
+This repository contains a model trained - and to be used with - TALLSorts for subtyping of new TALL samples based on RNA-seq:
+
+<img width="600" height="275" alt="image" src="https://github.com/user-attachments/assets/a69a8356-cd94-41b7-84ba-f90d10ada85a" />
+
+Briefly: It was trained on the publicly available *_counts file from Polonen 2025 after normalization in DESeq2. It expects normalized counts as input with rows as columns as ensembl gene names and rows as patient IDs:
 
 <img width="331" height="163" alt="image" src="https://github.com/user-attachments/assets/99109d8c-6fca-472e-911d-58c527036c3f" />
 
 
 ## EXAMPLE RUN
-[picks up after TALLSorts installation]
+[picks up after TALLSorts installation] - https://github.com/Oshlack/TALLSorts/wiki/1.-Installation
 ````
 conda activate tallsortsenv
 TALLSorts -m test -s normalized_counts.csv --d outdir --mp Polonen_cleaned_normalized_counts.pkl.gz
