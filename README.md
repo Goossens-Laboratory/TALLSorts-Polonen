@@ -31,7 +31,8 @@ Here I outline how this model was trained.
 - Remove:
   - mitochondrial genes
   - Y chromosome genes
-  - XIST - Result: approximately 16k genes retained
+  - XIST
+  - Result: approximately 16k genes retained
 
 ### Sample filtering
 - Remove samples without subtype labels
